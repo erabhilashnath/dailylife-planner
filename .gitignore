@@ -1,0 +1,5 @@
+node_modules/
+dist/
+*.log
+server/planner.db
+server/planner.db-*
