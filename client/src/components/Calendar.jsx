@@ -29,13 +29,13 @@ export default function Calendar({
         <button className="today-btn" onClick={onToday}>Today</button>
       </div>
 
-      <div className="calendar-grid weekdays">
+      <div className="weekday-row">
         {WEEKDAY_NAMES.map((d) => (
           <div key={d} className="weekday">{d}</div>
         ))}
       </div>
 
-      <div className="calendar-grid">
+      <div className="day-grid">
         {days.map((day) => {
           const inMonth = day.getMonth() === month;
           const key = toDateKey(day);

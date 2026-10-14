@@ -57,12 +57,18 @@ app.put("/api/todos/:id", (req, res) => {
 
   const text = req.body.text !== undefined ? req.body.text : existing.text;
   const done = req.body.done !== undefined ? (req.body.done ? 1 : 0) : existing.done;
+  const reminder = req.body.reminder !== undefined ? (req.body.reminder ? 1 : 0) : existing.reminder;
 
   if (!text || !text.trim()) {
     return res.status(400).json({ error: "text is required" });
   }
 
-  db.prepare("UPDATE todos SET text = ?, done = ? WHERE id = ?").run(text.trim(), done, id);
+  db.prepare("UPDATE todos SET text = ?, done = ?, reminder = ? WHERE id = ?").run(
+    text.trim(),
+    done,
+    reminder,
+    id
+  );
   const todo = db.prepare("SELECT * FROM todos WHERE id = ?").get(id);
   res.json(todo);
 });

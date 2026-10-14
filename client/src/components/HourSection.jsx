@@ -2,7 +2,16 @@ import { useState } from "react";
 import TodoItem from "./TodoItem";
 import { formatHourLabel } from "../dateUtils";
 
-export default function HourSection({ hour, todos, isCurrent, onAdd, onToggle, onEdit, onDelete }) {
+export default function HourSection({
+  hour,
+  todos,
+  isCurrent,
+  onAdd,
+  onToggle,
+  onEdit,
+  onDelete,
+  onToggleReminder,
+}) {
   const [text, setText] = useState("");
 
   function handleSubmit(e) {
@@ -28,6 +37,7 @@ export default function HourSection({ hour, todos, isCurrent, onAdd, onToggle, o
             onToggle={onToggle}
             onEdit={onEdit}
             onDelete={onDelete}
+            onToggleReminder={onToggleReminder}
           />
         ))}
       </ul>

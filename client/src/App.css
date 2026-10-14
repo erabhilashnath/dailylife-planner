@@ -1,11 +1,11 @@
 :root {
-  --bg: #0f1115;
-  --panel: #1a1d24;
-  --border: #2a2e37;
-  --text: #e8eaed;
-  --text-dim: #9aa0ab;
-  --accent: #5b8cff;
-  --danger: #ff5b5b;
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --border: #dcdfe4;
+  --text: #1a1d24;
+  --text-dim: #6b7280;
+  --accent: #3b6fe0;
+  --danger: #d7373f;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
@@ -25,29 +25,42 @@ body {
   padding: 1.5rem;
 }
 
+.app.day-view,
+.app.month-view {
+  max-width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.25rem;
+}
+
 .app-header h1 {
   font-size: 1.5rem;
   margin: 0 0 1rem;
 }
 
 .error-banner {
-  background: #3a1f1f;
-  color: #ffb4b4;
+  background: #fde8e8;
+  color: #b42318;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   margin-bottom: 1rem;
 }
 
 .app-main.single {
-  max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .day-header {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
 }
 
 .back-link {
@@ -60,11 +73,92 @@ body {
   text-decoration: underline;
 }
 
+.live-clock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.flip-group {
+  display: flex;
+  gap: 4px;
+}
+
+.flip-colon {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  padding: 0 0.1rem;
+  animation: clock-blink 1s steps(2, start) infinite;
+}
+
+@keyframes clock-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.flip-digit {
+  width: 34px;
+  height: 46px;
+  perspective: 240px;
+}
+
+.flip-digit-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg);
+}
+
+.flip-digit-inner.flipping {
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotateX(-180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  backface-visibility: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.flip-face::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.flip-face.back {
+  transform: rotateX(180deg);
+}
+
 .calendar {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1rem;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .calendar-header {
@@ -98,14 +192,12 @@ body {
   font-size: 0.8rem;
 }
 
-.calendar-grid {
+.weekday-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.weekdays {
-  margin-bottom: 4px;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
 }
 
 .weekday {
@@ -115,12 +207,20 @@ body {
   padding: 0.25rem 0;
 }
 
+.day-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 6px;
+}
+
 .day-cell {
   background: transparent;
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text);
-  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,11 +228,12 @@ body {
   gap: 2px;
   cursor: pointer;
   padding: 0.25rem;
+  min-height: 0;
 }
 
 .day-cell:hover {
-  border-color: var(--border);
-  background: #22262f;
+  border-color: var(--accent);
+  background: #eef0f3;
 }
 
 .day-cell.outside {
@@ -146,24 +247,24 @@ body {
 }
 
 .day-number {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 
 .event-dot-row {
   display: flex;
-  gap: 2px;
+  gap: 3px;
   align-items: center;
 }
 
 .event-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--accent);
 }
 
 .event-more {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: var(--text-dim);
 }
 
@@ -173,23 +274,50 @@ body {
 }
 
 .day-page {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 640px;
-  margin: 0 auto;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+@media (max-width: 1000px) {
+  .day-page {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .day-page {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .day-page {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+  }
 }
 
 .hour-section {
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.75rem;
   transition: background 0.3s, border-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .hour-section.current {
-  background: #163a24;
+  background: #e4f7ea;
   border-color: #2fae5b;
 }
 
@@ -198,19 +326,20 @@ body {
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: var(--text-dim);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  flex-shrink: 0;
 }
 
 .hour-section.current .hour-label {
-  color: #7fe3a3;
+  color: #1e7a3b;
 }
 
 .now-badge {
   background: #2fae5b;
-  color: #06160c;
-  font-size: 0.65rem;
+  color: #ffffff;
+  font-size: 0.85rem;
   font-weight: 700;
   padding: 0.1rem 0.4rem;
   border-radius: 10px;
@@ -219,17 +348,34 @@ body {
 
 .todo-list {
   list-style: none;
-  margin: 0 0 0.5rem;
-  padding: 0;
+  margin: 0 0 0.4rem;
+  padding: 0 0.15rem 0 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.todo-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
 }
 
 .todo-item {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.todo-item input[type="checkbox"] {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
 }
 
 .todo-item.done .todo-text {
@@ -240,24 +386,45 @@ body {
 .todo-text {
   flex: 1;
   cursor: text;
-  font-size: 0.9rem;
-  padding: 0.15rem 0.3rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  padding: 0.1rem 0.25rem;
   border-radius: 4px;
+  word-break: break-word;
 }
 
 .todo-text:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .todo-edit-input {
   flex: 1;
-  background: #11141a;
+  background: #ffffff;
   border: 1px solid var(--accent);
   color: var(--text);
   border-radius: 4px;
   padding: 0.15rem 0.3rem;
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   font-family: inherit;
+}
+
+.todo-reminder {
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.15rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.todo-reminder:hover {
+  opacity: 0.85;
+}
+
+.todo-reminder.active {
+  opacity: 1;
 }
 
 .todo-delete {
@@ -268,6 +435,7 @@ body {
   line-height: 1;
   cursor: pointer;
   padding: 0 0.25rem;
+  flex-shrink: 0;
 }
 
 .todo-delete:hover {
@@ -276,17 +444,19 @@ body {
 
 .todo-add-form {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-shrink: 0;
 }
 
 .todo-add-form input {
   flex: 1;
-  background: #11141a;
+  min-width: 0;
+  background: #ffffff;
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 6px;
-  padding: 0.3rem 0.5rem;
-  font-size: 0.85rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 1.05rem;
   font-family: inherit;
 }
 
@@ -295,7 +465,8 @@ body {
   border: none;
   color: #fff;
   border-radius: 6px;
-  padding: 0.3rem 0.7rem;
+  padding: 0.25rem 0.55rem;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
+  flex-shrink: 0;
 }

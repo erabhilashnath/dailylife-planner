@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function TodoItem({ todo, onToggle, onEdit, onDelete }) {
+export default function TodoItem({ todo, onToggle, onEdit, onDelete, onToggleReminder }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(todo.text);
 
@@ -46,6 +46,15 @@ export default function TodoItem({ todo, onToggle, onEdit, onDelete }) {
           {todo.text}
         </span>
       )}
+      <button
+        type="button"
+        className={`todo-reminder ${todo.reminder ? "active" : ""}`}
+        aria-label={todo.reminder ? "Turn off reminder" : "Set reminder"}
+        title={todo.reminder ? "Reminder on — will beep at this hour" : "Set reminder"}
+        onClick={() => onToggleReminder(todo.id, !todo.reminder)}
+      >
+        {todo.reminder ? "🔔" : "🔕"}
+      </button>
       <button
         type="button"
         className="todo-delete"

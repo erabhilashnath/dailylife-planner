@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar from "../components/Calendar";
+import LiveClock from "../components/LiveClock";
 import { fetchTodoCounts } from "../api";
 import { toDateKey } from "../dateUtils";
 
@@ -46,9 +47,10 @@ export default function MonthPage() {
   }
 
   return (
-    <div className="app">
+    <div className="app month-view">
       <header className="app-header">
         <h1>Daily Life Planner</h1>
+        <LiveClock />
       </header>
 
       {error && <div className="error-banner">{error}</div>}

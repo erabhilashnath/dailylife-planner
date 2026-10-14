@@ -14,9 +14,16 @@ db.exec(`
     hour INTEGER NOT NULL,
     text TEXT NOT NULL,
     done INTEGER NOT NULL DEFAULT 0,
+    reminder INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `);
+
+try {
+  db.exec("ALTER TABLE todos ADD COLUMN reminder INTEGER NOT NULL DEFAULT 0");
+} catch {
+  // column already exists from a previous run
+}
 
 db.exec(`DROP TABLE IF EXISTS events;`);
 
