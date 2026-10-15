@@ -6,6 +6,7 @@ export default function HourSection({
   hour,
   todos,
   isCurrent,
+  isPast,
   onAdd,
   onToggle,
   onEdit,
@@ -23,7 +24,7 @@ export default function HourSection({
   }
 
   return (
-    <section className={`hour-section ${isCurrent ? "current" : ""}`}>
+    <section className={`hour-section ${isCurrent ? "current" : ""} ${isPast ? "past" : ""}`}>
       <div className="hour-label">
         {formatHourLabel(hour)}
         {isCurrent && <span className="now-badge">Now</span>}

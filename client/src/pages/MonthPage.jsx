@@ -2,11 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar from "../components/Calendar";
 import LiveClock from "../components/LiveClock";
+import ThemeToggle from "../components/ThemeToggle";
+import FullscreenToggle from "../components/FullscreenToggle";
 import { fetchTodoCounts } from "../api";
 import { toDateKey } from "../dateUtils";
+import { useTheme } from "../useTheme";
+import { useFullscreen } from "../useFullscreen";
 
 export default function MonthPage() {
   const navigate = useNavigate();
+  const [theme, toggleTheme] = useTheme();
+  const [isFullscreen, toggleFullscreen] = useFullscreen();
   const today = new Date();
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
@@ -48,6 +54,8 @@ export default function MonthPage() {
 
   return (
     <div className="app month-view">
+      <ThemeToggle theme={theme} onToggle={toggleTheme} />
+      <FullscreenToggle isFullscreen={isFullscreen} onToggle={toggleFullscreen} />
       <header className="app-header">
         <h1>Daily Life Planner</h1>
         <LiveClock />

@@ -6,7 +6,45 @@
   --text-dim: #6b7280;
   --accent: #3b6fe0;
   --danger: #d7373f;
+  --input-bg: #ffffff;
+  --hover-bg: #eef0f3;
+  --hover-tint: rgba(0, 0, 0, 0.05);
+  --error-bg: #fde8e8;
+  --error-text: #b42318;
+  --current-bg: #e4f7ea;
+  --current-border: #2fae5b;
+  --current-text: #1e7a3b;
+  --now-badge-bg: #2fae5b;
+  --now-badge-text: #ffffff;
+  --past-bg: #f3a9a9;
+  --past-border: #d94c4c;
+  --card-shadow: rgba(0, 0, 0, 0.12);
+  --card-divider: rgba(0, 0, 0, 0.15);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1115;
+  --panel: #1a1d24;
+  --border: #2a2e37;
+  --text: #e8eaed;
+  --text-dim: #9aa0ab;
+  --accent: #5b8cff;
+  --danger: #ff5b5b;
+  --input-bg: #11141a;
+  --hover-bg: #22262f;
+  --hover-tint: rgba(255, 255, 255, 0.05);
+  --error-bg: #3a1f1f;
+  --error-text: #ffb4b4;
+  --current-bg: #163a24;
+  --current-border: #2fae5b;
+  --current-text: #7fe3a3;
+  --now-badge-bg: #2fae5b;
+  --now-badge-text: #06160c;
+  --past-bg: #2a1414;
+  --past-border: #8a2d2d;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --card-divider: rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -17,9 +55,11 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+  transition: background 0.2s, color 0.2s;
 }
 
 .app {
+  position: relative;
   max-width: 1100px;
   margin: 0 auto;
   padding: 1.5rem;
@@ -39,9 +79,37 @@ body {
   margin: 0 0 1rem;
 }
 
+.theme-toggle,
+.fullscreen-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-toggle {
+  right: 4rem;
+}
+
+.theme-toggle:hover,
+.fullscreen-toggle:hover {
+  border-color: var(--accent);
+}
+
 .error-banner {
-  background: #fde8e8;
-  color: #b42318;
+  background: var(--error-bg);
+  color: var(--error-text);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   margin-bottom: 1rem;
@@ -133,7 +201,7 @@ body {
   font-weight: 700;
   color: var(--text);
   backface-visibility: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 4px var(--card-shadow);
 }
 
 .flip-face::after {
@@ -143,7 +211,7 @@ body {
   right: 0;
   top: 50%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--card-divider);
 }
 
 .flip-face.back {
@@ -233,7 +301,7 @@ body {
 
 .day-cell:hover {
   border-color: var(--accent);
-  background: #eef0f3;
+  background: var(--hover-bg);
 }
 
 .day-cell.outside {
@@ -241,9 +309,26 @@ body {
   opacity: 0.4;
 }
 
+.day-cell.today {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.day-cell.today:hover {
+  background: var(--accent);
+}
+
 .day-cell.today .day-number {
-  color: var(--accent);
+  color: #ffffff;
   font-weight: 700;
+}
+
+.day-cell.today .event-more {
+  color: #ffffff;
+}
+
+.day-cell.today .event-dot {
+  background: #ffffff;
 }
 
 .day-number {
@@ -317,28 +402,33 @@ body {
 }
 
 .hour-section.current {
-  background: #e4f7ea;
-  border-color: #2fae5b;
+  background: var(--current-bg);
+  border-color: var(--current-border);
+}
+
+.hour-section.past {
+  background: var(--past-bg);
+  border-color: var(--past-border);
 }
 
 .hour-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 1.2rem;
-  color: var(--text-dim);
+  color: var(--text);
   margin-bottom: 0.4rem;
   flex-shrink: 0;
 }
 
 .hour-section.current .hour-label {
-  color: #1e7a3b;
+  color: var(--current-text);
 }
 
 .now-badge {
-  background: #2fae5b;
-  color: #ffffff;
+  background: var(--now-badge-bg);
+  color: var(--now-badge-text);
   font-size: 0.85rem;
   font-weight: 700;
   padding: 0.1rem 0.4rem;
@@ -387,6 +477,8 @@ body {
   flex: 1;
   cursor: text;
   font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
   line-height: 1.3;
   padding: 0.1rem 0.25rem;
   border-radius: 4px;
@@ -394,17 +486,18 @@ body {
 }
 
 .todo-text:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--hover-tint);
 }
 
 .todo-edit-input {
   flex: 1;
-  background: #ffffff;
+  background: var(--input-bg);
   border: 1px solid var(--accent);
   color: var(--text);
   border-radius: 4px;
   padding: 0.15rem 0.3rem;
   font-size: 1.15rem;
+  font-weight: 600;
   font-family: inherit;
 }
 
@@ -451,7 +544,7 @@ body {
 .todo-add-form input {
   flex: 1;
   min-width: 0;
-  background: #ffffff;
+  background: var(--input-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 6px;

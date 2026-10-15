@@ -2,9 +2,13 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import HourSection from "../components/HourSection";
 import LiveClock from "../components/LiveClock";
+import ThemeToggle from "../components/ThemeToggle";
+import FullscreenToggle from "../components/FullscreenToggle";
 import { fetchTodosForDate, createTodo, updateTodo, deleteTodo } from "../api";
 import { toDateKey, parseDateKey, DAY_START_HOUR, DAY_END_HOUR } from "../dateUtils";
 import { playBeep, unlockAudio } from "../beep";
+import { useTheme } from "../useTheme";
+import { useFullscreen } from "../useFullscreen";
 
 const HOURS = Array.from(
   { length: DAY_END_HOUR - DAY_START_HOUR + 1 },
@@ -17,6 +21,8 @@ export default function DayPage() {
   const [error, setError] = useState(null);
   const [now, setNow] = useState(new Date());
   const firedReminders = useRef(new Set());
+  const [theme, toggleTheme] = useTheme();
+  const [isFullscreen, toggleFullscreen] = useFullscreen();
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -37,7 +43,9 @@ export default function DayPage() {
     loadTodos();
   }, [loadTodos]);
 
-  const isToday = date === toDateKey(now);
+  const todayKey = toDateKey(now);
+  const isToday = date === todayKey;
+  const isPastDate = date < todayKey;
   const currentHour = now.getHours();
 
   useEffect(() => {
@@ -115,6 +123,8 @@ export default function DayPage() {
 
   return (
     <div className="app day-view">
+      <ThemeToggle theme={theme} onToggle={toggleTheme} />
+      <FullscreenToggle isFullscreen={isFullscreen} onToggle={toggleFullscreen} />
       <header className="app-header day-header">
         <Link to="/" className="back-link">← Back to calendar</Link>
         <h1>{dateLabel}</h1>
@@ -130,6 +140,7 @@ export default function DayPage() {
             hour={hour}
             todos={todosByHour[hour] || []}
             isCurrent={isToday && hour === currentHour}
+            isPast={isPastDate || (isToday && hour < currentHour)}
             onAdd={handleAdd}
             onToggle={handleToggle}
             onEdit={handleEdit}
